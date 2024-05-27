@@ -62,6 +62,33 @@ def cubic_spline_interpolation(x, y, x_new):
     return y_interp
 
 
+def plot_interpolation(x, y, x_new, y_interp, method, num_points):
+    plt.figure(figsize=(10, 6))
+    plt.plot(x, y, 'o', label='Original Data')
+    plt.plot(x_new, y_interp, '-', label=f'Interpolated Data ({method})')
+    plt.xlabel('Distance')
+    plt.ylabel('Elevation')
+    plt.legend()
+    plt.title(f'{method} Interpolation with {num_points} Points')
+    plt.show()
+
+
+def analyze_interpolation(data_files):
+    for file in data_files:
+        x, y = read_data(file)
+        x_new = np.linspace(x.min(), x.max(), 1000)
+
+        for num_points in [5, 10, 15, 20]:
+            x_points = np.linspace(x.min(), x.max(), num_points)
+            y_points = np.interp(x_points, x, y)
+
+            y_lagrange = lagrange_interpolation(x_points, y_points, x_new)
+            plot_interpolation(x, y, x_new, y_lagrange, 'Lagrange', num_points)
+
+            y_spline = cubic_spline_interpolation(x_points, y_points, x_new)
+            plot_interpolation(x, y, x_new, y_spline, 'Spline', num_points)
+
+
 def main():
     pass
 
