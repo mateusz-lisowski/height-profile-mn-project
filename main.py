@@ -90,7 +90,8 @@ def analyze_interpolation(data_files):
 
 
 def main():
-    pass
+    data_files = ['data/flat.csv', 'data/valley.csv']
+    analyze_interpolation(data_files)
 
 
 if __name__ == '__main__':
