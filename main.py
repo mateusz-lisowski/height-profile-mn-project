@@ -62,16 +62,21 @@ def cubic_spline_interpolation(x, y, x_new):
     return y_interp
 
 
-def plot_interpolation(x, y, x_points, y_points, y_interp, method, num_points):
+def chebyshev_nodes(a, b, n):
+    k = np.arange(n)
+    x = np.cos((2*k + 1) * np.pi / (2 * n))
+    return 0.5 * (a + b) + 0.5 * (b - a) * x
+
+
+def plot_interpolation(x, y, x_points, y_points, y_interp, method, num_points, distribution):
     plt.figure(figsize=(10, 6))
     plt.plot(x, y, 'o', label='Original Data')
-    plt.plot(x_points, y_points, 'o', label='Interpolation Points', color='red')
-    plt.plot(np.linspace(x.min(), x.max(), len(y_interp)), y_interp, '-',
-             label=f'Interpolated Data ({method})', color='green')
+    plt.plot(x_points, y_points, 'rx', label='Interpolation Nodes')
+    plt.plot(np.linspace(x.min(), x.max(), len(y_interp)), y_interp, '-', label=f'Interpolated Data ({method})')
     plt.xlabel('Distance')
     plt.ylabel('Elevation')
     plt.legend()
-    plt.title(f'{method} Interpolation with {num_points} Points')
+    plt.title(f'{method} Interpolation with {num_points} Points ({distribution})')
     plt.show()
 
 
@@ -81,14 +86,27 @@ def analyze_interpolation(data_files):
         x_new = np.linspace(x.min(), x.max(), 1000)
 
         for num_points in [5, 10, 15, 20]:
-            x_points = np.linspace(x.min(), x.max(), num_points)
-            y_points = np.interp(x_points, x, y)
+            x_points_uniform = np.linspace(x.min(), x.max(), num_points)
+            y_points_uniform = np.interp(x_points_uniform, x, y)
 
-            y_lagrange = lagrange_interpolation(x_points, y_points, x_new)
-            plot_interpolation(x, y, x_points, y_points, y_lagrange, 'Lagrange', num_points)
+            y_lagrange_uniform = lagrange_interpolation(x_points_uniform, y_points_uniform, x_new)
+            plot_interpolation(x, y, x_points_uniform, y_points_uniform, y_lagrange_uniform,
+                               'Lagrange', num_points, 'Uniform')
 
-            y_spline = cubic_spline_interpolation(x_points, y_points, x_new)
-            plot_interpolation(x, y, x_points, y_points, y_spline, 'Spline', num_points)
+            y_spline_uniform = cubic_spline_interpolation(x_points_uniform, y_points_uniform, x_new)
+            plot_interpolation(x, y, x_points_uniform, y_points_uniform, y_spline_uniform,
+                               'Spline', num_points, 'Uniform')
+
+            x_points_chebyshev = chebyshev_nodes(x.min(), x.max(), num_points)
+            y_points_chebyshev = np.interp(x_points_chebyshev, x, y)
+
+            y_lagrange_chebyshev = lagrange_interpolation(x_points_chebyshev, y_points_chebyshev, x_new)
+            plot_interpolation(x, y, x_points_chebyshev, y_points_chebyshev, y_lagrange_chebyshev,
+                               'Lagrange', num_points, 'Chebyshev')
+
+            y_spline_chebyshev = cubic_spline_interpolation(x_points_chebyshev, y_points_chebyshev, x_new)
+            plot_interpolation(x, y, x_points_chebyshev, y_points_chebyshev, y_spline_chebyshev,
+                               'Spline', num_points, 'Chebyshev')
 
 
 def main():
