@@ -104,10 +104,6 @@ def analyze_interpolation(data_files):
             plot_interpolation(x, y, x_points_chebyshev, y_points_chebyshev, y_lagrange_chebyshev,
                                'Lagrange', num_points, 'Chebyshev')
 
-            y_spline_chebyshev = cubic_spline_interpolation(x_points_chebyshev, y_points_chebyshev, x_new)
-            plot_interpolation(x, y, x_points_chebyshev, y_points_chebyshev, y_spline_chebyshev,
-                               'Spline', num_points, 'Chebyshev')
-
 
 def main():
     data_files = ['data/flat.csv', 'data/valley.csv']
