@@ -71,8 +71,9 @@ def chebyshev_nodes(a, b, n):
 def plot_interpolation(x, y, x_points, y_points, y_interp, method, num_points, distribution):
     plt.figure(figsize=(10, 6))
     plt.plot(x, y, 'o', label='Original Data')
-    plt.plot(x_points, y_points, 'rx', label='Interpolation Nodes')
-    plt.plot(np.linspace(x.min(), x.max(), len(y_interp)), y_interp, '-', label=f'Interpolated Data ({method})')
+    plt.plot(x_points, y_points, 'o', label='Interpolation Points', color='red')
+    plt.plot(np.linspace(x.min(), x.max(), len(y_interp)), y_interp, '-',
+             label=f'Interpolated Data ({method})', color='green')
     plt.xlabel('Distance')
     plt.ylabel('Elevation')
     plt.legend()
