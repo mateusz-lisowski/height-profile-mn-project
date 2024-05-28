@@ -62,10 +62,12 @@ def cubic_spline_interpolation(x, y, x_new):
     return y_interp
 
 
-def plot_interpolation(x, y, x_new, y_interp, method, num_points):
+def plot_interpolation(x, y, x_points, y_points, y_interp, method, num_points):
     plt.figure(figsize=(10, 6))
     plt.plot(x, y, 'o', label='Original Data')
-    plt.plot(x_new, y_interp, '-', label=f'Interpolated Data ({method})')
+    plt.plot(x_points, y_points, 'o', label='Interpolation Points', color='red')
+    plt.plot(np.linspace(x.min(), x.max(), len(y_interp)), y_interp, '-',
+             label=f'Interpolated Data ({method})', color='green')
     plt.xlabel('Distance')
     plt.ylabel('Elevation')
     plt.legend()
@@ -83,10 +85,10 @@ def analyze_interpolation(data_files):
             y_points = np.interp(x_points, x, y)
 
             y_lagrange = lagrange_interpolation(x_points, y_points, x_new)
-            plot_interpolation(x, y, x_new, y_lagrange, 'Lagrange', num_points)
+            plot_interpolation(x, y, x_points, y_points, y_lagrange, 'Lagrange', num_points)
 
             y_spline = cubic_spline_interpolation(x_points, y_points, x_new)
-            plot_interpolation(x, y, x_new, y_spline, 'Spline', num_points)
+            plot_interpolation(x, y, x_points, y_points, y_spline, 'Spline', num_points)
 
 
 def main():
